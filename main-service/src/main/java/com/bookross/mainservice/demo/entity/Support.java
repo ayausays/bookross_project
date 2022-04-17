@@ -2,11 +2,10 @@ package com.bookross.mainservice.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.UUID;
 
+import javax.persistence.*;
+
+@Table(name = "support")
 public class Support {
 
     private Integer id;
