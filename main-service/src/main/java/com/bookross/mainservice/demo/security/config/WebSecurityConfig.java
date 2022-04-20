@@ -1,6 +1,6 @@
 package com.bookross.mainservice.demo.security.config;
 
-import com.bookross.mainservice.demo.service.implementations.AppUserService;
+import com.bookross.mainservice.demo.service.common.AppUserCredentialsService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,14 +15,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @AllArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final AppUserService appUserService;
+    private final AppUserCredentialsService appUserCredentialsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic().disable();
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/v*/registration/**")
+                .antMatchers("/api/v*/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider daoAuthenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(bCryptPasswordEncoder);
-        provider.setUserDetailsService(appUserService);
+        provider.setUserDetailsService(appUserCredentialsService);
         return provider;
     }
 }
