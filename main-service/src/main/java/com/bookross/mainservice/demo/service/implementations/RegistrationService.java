@@ -3,8 +3,11 @@ package com.bookross.mainservice.demo.service.implementations;
 import com.bookross.mainservice.demo.entity.AppUser;
 import com.bookross.mainservice.demo.entity.AppUserRole;
 import com.bookross.mainservice.demo.entity.ConfirmationToken;
-import com.bookross.mainservice.demo.entity.RegistrationRequest;
+import com.bookross.mainservice.demo.entity.request.RegistrationRequest;
+import com.bookross.mainservice.demo.service.common.AppUserCredentialsService;
+import com.bookross.mainservice.demo.service.common.ConfirmationTokenService;
 import com.bookross.mainservice.demo.service.interfaces.EmailSender;
+import com.bookross.mainservice.demo.utils.EmailValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +17,7 @@ import java.time.LocalDateTime;
 @Service
 @AllArgsConstructor
 public class RegistrationService {
-    private final AppUserService appUserService;
+    private final AppUserCredentialsService appUserCredentialsService;
     private final EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
@@ -24,7 +27,7 @@ public class RegistrationService {
         if (!isValidEmail)
             throw new IllegalStateException("Email is not valid.");
 
-        String token = appUserService.signUp(new AppUser(
+        String token = appUserCredentialsService.signUp(new AppUser(
                 registrationRequest.getFirstName(),
                 registrationRequest.getLastName(),
                 registrationRequest.getEmail(),
@@ -45,7 +48,7 @@ public class RegistrationService {
         LocalDateTime expiresAt = confirmationToken.getExpiresAt();
         if (expiresAt.isBefore(LocalDateTime.now())) throw new IllegalStateException("Token is expired");
         confirmationTokenService.setConfirmedAt(token);
-        appUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
+        appUserCredentialsService.enableAppUser(confirmationToken.getAppUser().getEmail());
         return "confirmed";
     }
     /*docker run -p 1080:1080 -p 1025:1025 -p 81:80 maildev/maildev*/

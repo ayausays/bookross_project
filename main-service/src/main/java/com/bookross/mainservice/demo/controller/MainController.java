@@ -1,8 +1,8 @@
 package com.bookross.mainservice.demo.controller;
 
 
-import com.bookross.mainservice.demo.entity.LoginRequest;
-import com.bookross.mainservice.demo.entity.RegistrationRequest;
+import com.bookross.mainservice.demo.entity.request.LoginRequest;
+import com.bookross.mainservice.demo.entity.request.RegistrationRequest;
 import com.bookross.mainservice.demo.service.implementations.LoginService;
 import com.bookross.mainservice.demo.service.implementations.RegistrationService;
 import lombok.RequiredArgsConstructor;
