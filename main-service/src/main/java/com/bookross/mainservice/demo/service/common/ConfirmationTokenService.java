@@ -1,4 +1,4 @@
-package com.bookross.mainservice.demo.service.implementations;
+package com.bookross.mainservice.demo.service.common;
 
 import com.bookross.mainservice.demo.entity.ConfirmationToken;
 import com.bookross.mainservice.demo.repository.ConfirmationTokenRepository;
