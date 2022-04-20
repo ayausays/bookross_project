@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -17,19 +18,32 @@ import java.util.Collections;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-public class AppUser implements UserDetails {
+@Table(name = "app_user")
+public class AppUser implements UserDetails{
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
     private Long id;
+    @Column(name = "first_name")
     private String firstName;
+    @Column(name = "last_name")
     private String lastName;
+    @Email(regexp = ".+@.+\\..+")
+    @Column(name = "email")
     private String email;
+    @Column(name = "password")
     private String password;
     @Enumerated(EnumType.STRING)
+    @Column(name = "app_user_role")
     private AppUserRole appUserRole;
+    @Column(name = "locked")
     private boolean locked = false;
+    @Column(name = "enabled")
     private boolean enabled = false;
+
+    @OneToOne
+    @JoinColumn(name = "user_details_id")
+    private AppUserDetails appUserDetails;
 
     public AppUser(String firstName, String lastName,
                    String email,
@@ -40,7 +54,6 @@ public class AppUser implements UserDetails {
         this.password = password;
         this.appUserRole = appUserRole;
     }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority =
