@@ -1,9 +1,10 @@
-package com.bookross.mainservice.demo.entity;
+package com.bookross.mainservice.demo.entity.request;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+
 
 @Getter
 @EqualsAndHashCode

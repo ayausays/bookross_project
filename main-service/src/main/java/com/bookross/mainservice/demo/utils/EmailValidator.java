@@ -1,4 +1,4 @@
-package com.bookross.mainservice.demo.service.implementations;
+package com.bookross.mainservice.demo.utils;
 
 import org.springframework.stereotype.Service;
 
