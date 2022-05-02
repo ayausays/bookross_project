@@ -26,9 +26,9 @@ public class BuddyListServiceImpl implements BuddyListService {
 //    private final BuddyMapper buddyMapper = Mappers.getMapper(BuddyMapper.class);
 
     @Override
-    public Page<BuddyListGetResources> getBuddyList(int pageIndex) {
+    public Page<BuddyListGetResources> getBuddyList(int pageIndex,Long userId) {
 //        Long userId = commonService.getUserIdFromContext();
-        Long userId=null;
+
         Pageable pageable= PageRequest.of(pageIndex,20);
         Page<BuddyListGetResources> buddyList = buddylistRepository.findByReceiverId(userId,pageable);
 

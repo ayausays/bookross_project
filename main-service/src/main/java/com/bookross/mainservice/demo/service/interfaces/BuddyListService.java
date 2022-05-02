@@ -15,7 +15,7 @@ receiver is current user which i get from token and UserContextHolder
     /*
     It will returns all buddy list which is active
     */
-    public Page<BuddyListGetResources> getBuddyList(int pageIndex);
+    public Page<BuddyListGetResources> getBuddyList(int pageIndex,Long userId);
 
     /*
 

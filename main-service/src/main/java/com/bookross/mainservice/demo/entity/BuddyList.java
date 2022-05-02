@@ -9,7 +9,7 @@ import lombok.*;
 
 @Data
 @Entity
-@Builder // wow, amazing :)
+@Builder
 @Table(name = "buddylist")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,7 +32,7 @@ public class BuddyList {
     private Boolean isRead;
 
     private Long link;
-// ok thank you dear .
+
 
     @Setter(AccessLevel.NONE)
     private LocalDateTime createdAt;
