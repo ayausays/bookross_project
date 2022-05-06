@@ -2,6 +2,7 @@ package com.bookross.mainservice.demo.service.implementations;
 
 import com.bookross.mainservice.demo.entity.AppUser;
 import com.bookross.mainservice.demo.entity.AppUserDetails;
+import com.bookross.mainservice.demo.entity.request.AppUserDetailsDto;
 import com.bookross.mainservice.demo.repository.AppUserDetailsRepository;
 import com.bookross.mainservice.demo.service.interfaces.AppUserDetailsService;
 import com.bookross.mainservice.demo.service.interfaces.AppUserService;
@@ -37,4 +38,16 @@ public class AppUserDetailsServiceImpl  extends BaseServiceImpl<AppUserDetails, 
         appUserService.save(user);
     }
 
+    @Override
+    public AppUserDetailsDto getAppUserDetails(Long userID) {
+        AppUser user = appUserService.findOrThrowNotFound(userID);
+        AppUserDetails details = user.getAppUserDetails();
+        AppUserDetailsDto appUserDetailsDto = new AppUserDetailsDto();
+        appUserDetailsDto.setUserID(user.getId());
+        appUserDetailsDto.setCity(details.getCity());
+        appUserDetailsDto.setPhoneNumber(details.getPhoneNumber());
+        appUserDetailsDto.setDob(details.getDob());
+        appUserDetailsDto.setAboutUser(details.getAboutUser());
+        return appUserDetailsDto;
+    }
 }

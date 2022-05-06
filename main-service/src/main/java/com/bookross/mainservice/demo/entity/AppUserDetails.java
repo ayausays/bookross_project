@@ -1,13 +1,13 @@
 package com.bookross.mainservice.demo.entity;
 
 
-import com.bookross.mainservice.demo.utils.Constants;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -32,8 +32,6 @@ public class AppUserDetails {
     private LocalDate dob;
 
     @Column(name = "phone_number")
-    @Size(min = Constants.PHONE_LENGTH, max = Constants.PHONE_LENGTH)
-    @Pattern(regexp = Constants.PHONE_REGEX, message = "Номер телефона не соответсвует regexp-у")
     private String phoneNumber;
 
     @Column(name = "about_user")

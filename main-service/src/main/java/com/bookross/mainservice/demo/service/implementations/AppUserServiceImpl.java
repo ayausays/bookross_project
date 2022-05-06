@@ -18,8 +18,9 @@ public class AppUserServiceImpl extends BaseServiceImpl<AppUser, Long, AppUserRe
             user.setFirstName(firstName);
         if (lastName != null)
             user.setLastName(lastName);
-        if (email != null)
+        if (email != null && !findByEmail(email).isPresent()){
             user.setEmail(email);
+        }
         getRepository().save(user);
     }
 
