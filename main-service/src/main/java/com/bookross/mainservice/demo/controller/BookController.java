@@ -1,7 +1,6 @@
 package com.bookross.mainservice.demo.controller;
 
 
-import com.bookross.mainservice.demo.entity.Book;
 import com.bookross.mainservice.demo.entity.request.BookDto;
 import com.bookross.mainservice.demo.service.interfaces.BookService;
 import com.bookross.mainservice.demo.service.interfaces.ImageService;
@@ -14,7 +13,8 @@ import javax.servlet.annotation.MultipartConfig;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/user_books")
+@CrossOrigin
+@RequestMapping(path = "api/v1/userBooks")
 @RequiredArgsConstructor
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 10, maxFileSize = 1920 * 1080 * 50, maxRequestSize = 1920 * 1080 * 100)
 public class BookController {
@@ -23,43 +23,48 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping(path = "/getUserBooks/{userID}")
-    public ResponseEntity<List<Book>> getBooksById(@PathVariable("userID") Long id){
+    // works postman
+    public ResponseEntity<List<BookDto>> getBooksByUserId(@PathVariable("userID") Long id){
         return ResponseEntity.ok(bookService.findBooksByUserID(id));
     }
 
+    // works postman
     @GetMapping(path = "/getBook/{bookID}")
-    public ResponseEntity<Book> getBook(@PathVariable("bookID") Long id){
+    public ResponseEntity<BookDto> getBook(@PathVariable("bookID") Long id){
         return ResponseEntity.ok(bookService.findBook(id));
     }
 
+    // works postman
     @PostMapping(path = "/addBook")
-    public ResponseEntity<Void> addBook(@RequestParam BookDto bookDto){
+    public ResponseEntity<Void> addBook(@RequestBody BookDto bookDto){
         bookService.saveBook(bookDto);
         return ResponseEntity.ok().build();
     }
 
+    // todo: check update genre
     @PutMapping(path = "/updateBook/{bookID}")
     public ResponseEntity<Void> updateBook(@PathVariable("bookID") Long id,
                                            @RequestParam(required = false) String title,
                                            @RequestParam(required = false) String author,
-                                           @RequestParam(required = false) String status
+                                           @RequestParam(required = false) String status,
+                                           @RequestParam(required = false) String[] genres
                                            ){
-        bookService.updateBook(id, title, author, status);
+        bookService.updateBook(id, title, author, status, genres);
         return ResponseEntity.ok().build();
     }
 
+    // works postman
     @PutMapping(path = "/updateBookImage/{bookID}")
     public ResponseEntity<Void> updateBookImage(@PathVariable("bookID") Long id, @RequestPart("image") MultipartFile file){
         imageService.saveBookImage(id, file);
         return ResponseEntity.ok().build();
     }
 
+    // works postman
     @DeleteMapping(path = "/deleteBook/{bookID}")
     public ResponseEntity<Void> deleteBook(@PathVariable("bookID") Long id){
         bookService.deleteBook(id);
         return ResponseEntity.ok().build();
     }
-
-
 
 }
