@@ -1,11 +1,9 @@
 package com.bookross.mainservice.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 
 import javax.persistence.*;
 
@@ -14,21 +12,18 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-@Table(name = "support")
-public class Support {
-
-
+@Table(name = "complains")
+public class Complain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "supportEmail")
-    private String supportEmail;
+    @Column(name = "loginOfUser")
+    private String loginOfUser;
 
-    @Column(name = "supportType")
-    private String supportType;
+    @Column(name = "complainType")
+    private String complainType;
 
-    @Column(name = "supportComment")
-    private String supportComment;
-
+    @Column(name = "complainComment")
+    private String complainComment;
 }

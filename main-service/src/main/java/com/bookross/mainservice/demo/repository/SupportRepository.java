@@ -2,6 +2,11 @@ package com.bookross.mainservice.demo.repository;
 
 import com.bookross.mainservice.demo.entity.Support;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface SupportRepository extends JpaRepository<Support,Integer> {
+@Repository
+@Transactional(readOnly = true)
+public interface SupportRepository extends BaseRepository<Support, Long> {
 }
