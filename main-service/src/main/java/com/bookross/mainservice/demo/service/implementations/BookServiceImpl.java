@@ -56,6 +56,7 @@ public class BookServiceImpl extends BaseServiceImpl<Book, Long, BookRepository>
 
     private BookDto convertToBookDto(Book book){
         BookDto bookDto = new BookDto();
+        bookDto.setId(book.getId());
         bookDto.setUserID(book.getUser().getId());
         bookDto.setAuthor(book.getAuthor());
         bookDto.setStatus(BookStatusEnum.valueOf(book.getStatus()));

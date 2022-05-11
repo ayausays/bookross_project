@@ -13,9 +13,11 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 public class BookDto {
-    Long userID;
-    String title;
-    String author;
-    BookStatusEnum status;
-    List<String> genres;
+    private Long id;
+    private Long userID;
+    private String title;
+    private String author;
+    private BookStatusEnum status;
+    private List<String> genres;
+    // todo: how to send image?
 }

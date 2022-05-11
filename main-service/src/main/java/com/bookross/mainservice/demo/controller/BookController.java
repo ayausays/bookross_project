@@ -3,6 +3,7 @@ package com.bookross.mainservice.demo.controller;
 
 import com.bookross.mainservice.demo.entity.request.BookDto;
 import com.bookross.mainservice.demo.service.interfaces.BookService;
+import com.bookross.mainservice.demo.service.interfaces.GenreService;
 import com.bookross.mainservice.demo.service.interfaces.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,27 +22,32 @@ public class BookController {
 
     private final ImageService imageService;
     private final BookService bookService;
+    private final GenreService genreService;
+
+    @GetMapping(path = "/getGenres")
+    public ResponseEntity<List<String>> getGenres(){
+        return ResponseEntity.ok(genreService.getAllGenres());
+    }
 
     @GetMapping(path = "/getUserBooks/{userID}")
-    // works postman
+
     public ResponseEntity<List<BookDto>> getBooksByUserId(@PathVariable("userID") Long id){
         return ResponseEntity.ok(bookService.findBooksByUserID(id));
     }
 
-    // works postman
+
     @GetMapping(path = "/getBook/{bookID}")
     public ResponseEntity<BookDto> getBook(@PathVariable("bookID") Long id){
         return ResponseEntity.ok(bookService.findBook(id));
     }
 
-    // works postman
+
     @PostMapping(path = "/addBook")
     public ResponseEntity<Void> addBook(@RequestBody BookDto bookDto){
         bookService.saveBook(bookDto);
         return ResponseEntity.ok().build();
     }
 
-    // todo: check update genre
     @PutMapping(path = "/updateBook/{bookID}")
     public ResponseEntity<Void> updateBook(@PathVariable("bookID") Long id,
                                            @RequestParam(required = false) String title,
@@ -53,14 +59,13 @@ public class BookController {
         return ResponseEntity.ok().build();
     }
 
-    // works postman
     @PutMapping(path = "/updateBookImage/{bookID}")
     public ResponseEntity<Void> updateBookImage(@PathVariable("bookID") Long id, @RequestPart("image") MultipartFile file){
         imageService.saveBookImage(id, file);
         return ResponseEntity.ok().build();
     }
 
-    // works postman
+
     @DeleteMapping(path = "/deleteBook/{bookID}")
     public ResponseEntity<Void> deleteBook(@PathVariable("bookID") Long id){
         bookService.deleteBook(id);
