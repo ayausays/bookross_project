@@ -40,7 +40,7 @@ public class AppUser implements UserDetails{
     private boolean locked = false;
     @Column(name = "enabled")
     private boolean enabled = false;
-
+    private String photo;//profile picture
     @OneToOne
     @JoinColumn(name = "user_details_id")
     private AppUserDetails appUserDetails;
