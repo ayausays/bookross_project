@@ -1,4 +1,4 @@
-package com.bookross.mainservice.demo.entity.ref;
+package com.bookross.mainservice.demo.entity;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "ref_city")
-public class CityRef {
+public class City {
     @SequenceGenerator(name = "city_sequence", sequenceName = "city_sequence", allocationSize = 1)
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "city_sequence")
