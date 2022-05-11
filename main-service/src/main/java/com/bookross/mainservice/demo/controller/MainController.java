@@ -19,20 +19,17 @@ public class MainController {
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping(path = "register", consumes = {"application/json"})
-    // works postman
     public String register(@RequestBody RegistrationRequest registrationRequest){
         return registrationService.register(registrationRequest);
     }
 
     @PostMapping(path = "login")
-    // works postman
     public String login(@RequestBody LoginRequest loginRequest){
         return loginService.login(loginRequest);
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping(path = "confirm")
-    // works postman
     public String confirm(@RequestParam("token") String token){
         return registrationService.confirmToken(token);
     }
