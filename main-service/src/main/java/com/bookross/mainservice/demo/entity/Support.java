@@ -1,19 +1,19 @@
 package com.bookross.mainservice.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
 @EqualsAndHashCode
-@NoArgsConstructor
 @Entity
+@RequiredArgsConstructor
 @Table(name = "support")
 public class Support {
 

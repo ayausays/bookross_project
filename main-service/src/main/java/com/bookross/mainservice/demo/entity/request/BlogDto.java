@@ -1,23 +1,21 @@
 package com.bookross.mainservice.demo.entity.request;
 
-import com.bookross.mainservice.demo.entity.BookStatusEnum;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
-public class BookDto {
+public class BlogDto {
     private Long id;
     private Long userID;
-    private String title;
-    private String author;
-    private BookStatusEnum status;
-    private List<String> genres;
+    private String topic;
+    private String blogText;
+    private LocalDateTime dateOfPublication;
     // todo: how to send image?
 }

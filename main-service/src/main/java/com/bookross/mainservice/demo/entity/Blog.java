@@ -33,4 +33,7 @@ public class Blog {
 
     @Column(name = "dateOfPub")
     private LocalDateTime dateOfPublication;
+
+    @Column(name = "blog_image_path")
+    private String imagePath;
 }

@@ -1,6 +1,4 @@
 package com.bookross.mainservice.demo.controller;
-
-
 import com.bookross.mainservice.demo.entity.request.MessagePostResource;
 import com.bookross.mainservice.demo.entity.response.BuddyListGetResources;
 import com.bookross.mainservice.demo.entity.response.GetMessageResponse;
@@ -29,6 +27,5 @@ public interface ChatController {
     @GetMapping("/get/{userId}/{page}/{me}")
     @SendTo("/topic/greeting")
     public ResponseEntity<Page<GetMessageResponse>> getAUserMessages(@PathVariable String userId, @PathVariable int page,@PathVariable Long me);
-
 
 }

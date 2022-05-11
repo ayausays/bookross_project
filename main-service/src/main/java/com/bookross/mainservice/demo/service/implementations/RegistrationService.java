@@ -7,7 +7,6 @@ import com.bookross.mainservice.demo.entity.request.RegistrationRequest;
 import com.bookross.mainservice.demo.service.common.AppUserCredentialsService;
 import com.bookross.mainservice.demo.service.common.ConfirmationTokenService;
 import com.bookross.mainservice.demo.service.interfaces.EmailSender;
-import com.bookross.mainservice.demo.utils.EmailValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,15 +17,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class RegistrationService {
     private final AppUserCredentialsService appUserCredentialsService;
-    private final EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
 
     public String register(RegistrationRequest registrationRequest){
-        boolean isValidEmail = emailValidator.test(registrationRequest.getEmail());
-        if (!isValidEmail)
-            throw new IllegalStateException("Email is not valid.");
-
         String token = appUserCredentialsService.signUp(new AppUser(
                 registrationRequest.getFirstName(),
                 registrationRequest.getLastName(),

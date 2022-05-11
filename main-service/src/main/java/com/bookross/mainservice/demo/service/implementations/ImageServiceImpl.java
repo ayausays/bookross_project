@@ -1,10 +1,10 @@
 package com.bookross.mainservice.demo.service.implementations;
 
+import com.bookross.mainservice.demo.entity.AppUser;
 import com.bookross.mainservice.demo.entity.AppUserDetails;
+import com.bookross.mainservice.demo.entity.Blog;
 import com.bookross.mainservice.demo.entity.Book;
-import com.bookross.mainservice.demo.service.interfaces.AppUserDetailsService;
-import com.bookross.mainservice.demo.service.interfaces.BookService;
-import com.bookross.mainservice.demo.service.interfaces.ImageService;
+import com.bookross.mainservice.demo.service.interfaces.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,31 +19,37 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ImageServiceImpl extends HttpServlet implements ImageService {
 
+    private final AppUserService appUserService;
     private final AppUserDetailsService appUserDetailsService;
     private final BookService bookService;
-    private final String USER_IMAGES_DIR = "C:\\Users\\Yser\\Desktop\\Projects\\bookross\\main-service\\src\\userImages";
-    private final String BOOK_IMAGES_DIR = "C:\\Users\\Yser\\Desktop\\Projects\\bookross\\main-service\\src\\bookImages";
+    private final BlogService blogService;
+    private final String USER_IMAGES_DIR = "C:\\Users\\Yser\\Desktop\\Projects\\bookross\\main-service\\src\\images\\userImages";
+    private final String BOOK_IMAGES_DIR = "C:\\Users\\Yser\\Desktop\\Projects\\bookross\\main-service\\src\\images\\bookImages";
+    private final String BLOG_IMAGES_DIR = "C:\\Users\\Yser\\Desktop\\Projects\\bookross\\main-service\\src\\images\\blogImages";
 
 
     @Override
     public void saveUserImage(Long id, MultipartFile multipartFile) {
-            String filePath = USER_IMAGES_DIR + File.separator + UUID.randomUUID() + ".jpg";
-            putImageToFolder(filePath, multipartFile);
-            AppUserDetails details = appUserDetailsService.findOrThrowNotFound(id);
-            if (details.getImagePath() != null) {
-                File oldFile = new File(details.getImagePath());
-                oldFile.delete();
-            }
-            details.setImagePath(filePath);
-            appUserDetailsService.save(details);
+        String filePath = USER_IMAGES_DIR + File.separator + UUID.randomUUID() + ".jpg";
+        putImageToFolder(filePath, multipartFile);
+        AppUser appUser = appUserService.getUserById(id);
+        AppUserDetails appUserDetails = appUser.getAppUserDetails() == null ? new AppUserDetails() : appUser.getAppUserDetails();
+        if (appUserDetails.getImagePath() != null) {
+            File oldFile = new File(appUserDetails.getImagePath());
+            oldFile.delete();
         }
+        appUserDetails.setImagePath(filePath);
+        appUserDetails = appUserDetailsService.save(appUserDetails);
+        appUser.setAppUserDetails(appUserDetails);
+        appUserService.save(appUser);
+    }
 
     @Override
     public void saveBookImage(Long id, MultipartFile multipartFile) {
         String filePath = BOOK_IMAGES_DIR + File.separator + UUID.randomUUID() + ".jpg";
         putImageToFolder(filePath, multipartFile);
         Book book = bookService.findOrThrowNotFound(id);
-        if (book.getImagePath() != null){
+        if (book.getImagePath() != null) {
             File oldFile = new File(book.getImagePath());
             oldFile.delete();
         }
@@ -52,8 +58,21 @@ public class ImageServiceImpl extends HttpServlet implements ImageService {
 
     }
 
+    @Override
+    public void saveBlogImage(Long id, MultipartFile multipartFile) {
+        String filePath = BLOG_IMAGES_DIR + File.separator + UUID.randomUUID() + ".jpg";
+        putImageToFolder(filePath, multipartFile);
+        Blog blog = blogService.findOrThrowNotFound(id);
+        if (blog.getImagePath() != null){
+            File oldFile = new File(blog.getImagePath());
+            oldFile.delete();
+        }
+        blog.setImagePath(filePath);
+        blogService.save(blog);
+    }
 
-    private void putImageToFolder(String filePath, MultipartFile multipartFile){
+
+    private void putImageToFolder(String filePath, MultipartFile multipartFile) {
         try {
             File file = new File(filePath);
             try (
@@ -67,8 +86,7 @@ public class ImageServiceImpl extends HttpServlet implements ImageService {
             } catch (IOException e) {
                 throw new RuntimeException("IO error", e);
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             System.out.println("error" + ex);
         }
     }

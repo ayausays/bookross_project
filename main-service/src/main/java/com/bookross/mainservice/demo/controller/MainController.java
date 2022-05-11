@@ -9,21 +9,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(path = "api/v1/registration")
 @RequiredArgsConstructor
 public class MainController {
+
     private final RegistrationService registrationService;
     private final LoginService loginService;
 
-    @PostMapping(path = "register")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping(path = "register", consumes = {"application/json"})
     public String register(@RequestBody RegistrationRequest registrationRequest){
         return registrationService.register(registrationRequest);
     }
+
     @PostMapping(path = "login")
     public String login(@RequestBody LoginRequest loginRequest){
         return loginService.login(loginRequest);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping(path = "confirm")
     public String confirm(@RequestParam("token") String token){
         return registrationService.confirmToken(token);

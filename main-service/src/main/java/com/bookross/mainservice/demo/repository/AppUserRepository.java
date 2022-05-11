@@ -1,7 +1,6 @@
 package com.bookross.mainservice.demo.repository;
 
 import com.bookross.mainservice.demo.entity.AppUser;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,4 +18,9 @@ public interface AppUserRepository extends BaseRepository<AppUser, Long> {
     @Query("UPDATE AppUser a " +
             "SET a.enabled = TRUE WHERE a.email = ?1")
     int enableAppUser(String email);
+
+
+    /*    @Query(value = "select a from AppUser a limit ?1 offset ?2", nativeQuery = true)
+    List<AppUser> getAllUsers(int limit, int offset);*/
+
 }

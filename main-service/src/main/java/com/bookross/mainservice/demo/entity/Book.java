@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,7 +33,11 @@ public class Book {
     @Column(name = "status")
     private String status;
 
-    @Column(name = "book_image")
+    @Column(name = "book_image_path")
     private String imagePath;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "books_genres", joinColumns = { @JoinColumn(name = "book_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "genre_id") })
+    private List<Genre> genres;
 }
