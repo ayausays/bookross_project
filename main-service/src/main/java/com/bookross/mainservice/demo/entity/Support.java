@@ -12,7 +12,6 @@ import javax.persistence.*;
 @Getter
 @Setter
 @EqualsAndHashCode
-@NoArgsConstructor
 @Entity
 @RequiredArgsConstructor
 @Table(name = "support")
