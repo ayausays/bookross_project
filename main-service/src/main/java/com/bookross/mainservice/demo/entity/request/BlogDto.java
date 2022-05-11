@@ -12,8 +12,10 @@ import java.time.LocalDateTime;
 @ToString
 @EqualsAndHashCode
 public class BlogDto {
+    private Long id;
     private Long userID;
     private String topic;
     private String blogText;
     private LocalDateTime dateOfPublication;
+    // todo: how to send image?
 }

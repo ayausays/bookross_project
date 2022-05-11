@@ -1,7 +1,6 @@
 package com.bookross.mainservice.demo.controller;
 
 
-import com.bookross.mainservice.demo.entity.Blog;
 import com.bookross.mainservice.demo.entity.request.BlogDto;
 import com.bookross.mainservice.demo.service.interfaces.BlogService;
 import com.bookross.mainservice.demo.service.interfaces.ImageService;
@@ -23,15 +22,13 @@ public class BlogController {
     private final ImageService imageService;
     private final BlogService blogService;
 
-    // todo: make dtos for all entities to return them for get requests
-
     @GetMapping(path = "/getUserBlogs/{userID}")
-    public ResponseEntity<List<Blog>> getUserBlogsById(@PathVariable("userID") Long id) {
+    public ResponseEntity<List<BlogDto>> getUserBlogsById(@PathVariable("userID") Long id) {
         return ResponseEntity.ok(blogService.findBlogsByUserID(id));
     }
     
-    @GetMapping(path = "getBlog/{blogID}")
-    public ResponseEntity<Blog> getBlog(@PathVariable("blogID") Long id){
+    @GetMapping(path = "/getBlog/{blogID}")
+    public ResponseEntity<BlogDto> getBlog(@PathVariable("blogID") Long id){
         return ResponseEntity.ok(blogService.findBlog(id));
     }
     
@@ -40,12 +37,10 @@ public class BlogController {
         blogService.saveBlog(blogDto);
         return ResponseEntity.ok().build();
     }
-    
-    @PutMapping(path = "/updateBlog/{blogID}")
-    public ResponseEntity<Void> updateBlog(@PathVariable("blogID") Long id, 
-                                           @RequestParam(required = false) String topic,
-                                           @RequestParam(required = false) String blogText){
-        blogService.updateBlog(id, topic, blogText);
+
+    @PutMapping(path = "/updateBlog")
+    public ResponseEntity<Void> updateBlog(@RequestBody BlogDto blogDto){
+        blogService.updateBlog(blogDto);
         return ResponseEntity.ok().build();
     }
 

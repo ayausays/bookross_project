@@ -12,11 +12,13 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class BlogServiceImpl extends BaseServiceImpl<Blog, Long, BlogRepository>
                             implements BlogService {
+
     private final AppUserService appUserService;
 
     @Override
@@ -31,13 +33,25 @@ public class BlogServiceImpl extends BaseServiceImpl<Blog, Long, BlogRepository>
     }
 
     @Override
-    public List<Blog> findBlogsByUserID(Long userID) {
-        return getRepository().findBlogsByUserID(userID);
+    public List<BlogDto> findBlogsByUserID(Long userID) {
+        List<Blog> blogs =  getRepository().findBlogsByUserID(userID);
+        return blogs.stream().map(this::convertToBlogDto).collect(Collectors.toList());
+    }
+
+    public BlogDto convertToBlogDto(Blog blog){
+        BlogDto blogDto = new BlogDto();
+        blogDto.setId(blog.getId());
+        blogDto.setUserID(blog.getUser().getId());
+        blogDto.setTopic(blog.getTopic());
+        blogDto.setDateOfPublication(blog.getDateOfPublication());
+        blogDto.setBlogText(blog.getBlogText());
+        return blogDto;
     }
 
     @Override
-    public Blog findBlog(Long id) {
-        return findOrThrowNotFound(id);
+    public BlogDto findBlog(Long id) {
+        Blog blog = findOrThrowNotFound(id);
+        return convertToBlogDto(blog);
     }
 
     @Override
@@ -46,13 +60,13 @@ public class BlogServiceImpl extends BaseServiceImpl<Blog, Long, BlogRepository>
     }
 
     @Override
-    public void updateBlog(Long id, String topic, String blogText) {
-        Blog blog = findOrThrowNotFound(id);
-        if (topic != null){
-            blog.setTopic(topic);
+    public void updateBlog(BlogDto blogDto) {
+        Blog blog = findOrThrowNotFound(blogDto.getId());
+        if (blogDto.getTopic() != null){
+            blog.setTopic(blogDto.getTopic());
         }
-        if (blogText != null){
-            blog.setBlogText(blogText);
+        if (blogDto.getBlogText() != null){
+            blog.setBlogText(blogDto.getBlogText());
         }
         getRepository().save(blog);
     }

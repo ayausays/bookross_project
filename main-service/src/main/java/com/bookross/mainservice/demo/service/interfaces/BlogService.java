@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface BlogService extends BaseService<Blog, Long>{
     void saveBlog(BlogDto BlogDto);
-    List<Blog> findBlogsByUserID(Long userID);
-    Blog findBlog(Long id);
+    List<BlogDto> findBlogsByUserID(Long userID);
+    BlogDto findBlog(Long id);
     void deleteBlog(Long id);
-    void updateBlog(Long id, String topic, String blogText);
+    void updateBlog(BlogDto blogDto);
 }
