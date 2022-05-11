@@ -1,8 +1,10 @@
 package com.bookross.mainservice.demo.controller;
 
-import com.bookross.mainservice.demo.entity.AppUser;
+import com.bookross.mainservice.demo.entity.request.AppUserDto;
 import com.bookross.mainservice.demo.service.interfaces.AppUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,22 +17,22 @@ import java.util.List;
 public class AppUserController {
     private final AppUserService appUserService;
 
-    // todo: make dtos for all entities to return them for get requests
-
-    // works postman
     @GetMapping(path = "/getUser/{id}")
-    public ResponseEntity<AppUser> getUserById(@PathVariable Long id){
-        return ResponseEntity.ok(appUserService.getUserById(id));
+    public ResponseEntity<AppUserDto> getUserById(@PathVariable Long id){
+        return ResponseEntity.ok(appUserService.getUserDtoById(id));
     }
 
-    // todo: not urgent, but return pageable, not list.
-    // works postman
     @GetMapping(path = "/getAll")
-    public ResponseEntity<List<AppUser>> getUsers(){
-        return ResponseEntity.ok(appUserService.getAllUsers());
+    public ResponseEntity<List<AppUserDto>> getUsers(){
+        return ResponseEntity.ok(appUserService.getAllUserDtos());
     }
 
-    // works postman
+    // pageable result not working for some reason
+/*    @PostMapping(path = "/getAllUsers")
+    public ResponseEntity<Page<AppUserDto>> getUsers(Pageable pageable){
+        return ResponseEntity.ok(appUserService.getAllUserDtos(pageable));
+    }*/
+
     @PutMapping(path = "/update/{userID}")
     public ResponseEntity<Void> updateUser(@PathVariable("userID") Long userID,
                            @RequestParam(required = false) String firstName,
@@ -40,7 +42,6 @@ public class AppUserController {
         return ResponseEntity.ok().build();
     }
 
-    // works postman
     @DeleteMapping(path = "/delete/{userID}")
     public ResponseEntity<Void> deleteUser(@PathVariable("userID") Long userID){
         appUserService.deleteUser(userID);
