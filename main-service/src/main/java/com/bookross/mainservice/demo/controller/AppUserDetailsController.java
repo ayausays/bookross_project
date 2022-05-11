@@ -2,6 +2,7 @@ package com.bookross.mainservice.demo.controller;
 
 import com.bookross.mainservice.demo.entity.request.AppUserDetailsDto;
 import com.bookross.mainservice.demo.service.interfaces.AppUserDetailsService;
+import com.bookross.mainservice.demo.service.interfaces.CityService;
 import com.bookross.mainservice.demo.service.interfaces.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.servlet.annotation.MultipartConfig;
-import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -20,34 +21,28 @@ import java.time.LocalDate;
 public class AppUserDetailsController {
     private final ImageService imageService;
     private final AppUserDetailsService appUserDetailsService;
-
-    // todo: make dtos for all entities to return them for get requests
+    private final CityService cityService;
 
     @PutMapping(path = "/updateImage/{userID}")
-    // works postman
     public ResponseEntity<Void> updateUserImage(@PathVariable("userID") Long userID, @RequestPart("image") MultipartFile file) {
         imageService.saveUserImage(userID, file);
         return ResponseEntity.ok().build();
     }
 
-    // todo: ref city
-    // todo: dob update fix it
-    // works postman
-    @PutMapping(path = "/updateUserDetails/{userID}")
-    public ResponseEntity<Void> updateUserDetails(@PathVariable("userID") Long userID,
-                                                  @RequestParam(required = false) String city,
-                                                  @RequestParam(required = false) LocalDate dob,
-                                                  @RequestParam(required = false) String phoneNumber,
-                                                  @RequestParam(required = false) String aboutUser
-                                                  ){
-        appUserDetailsService.updateAppUserDetails(userID, city, dob, phoneNumber, aboutUser);
+    @PutMapping(path = "/saveUserDetails")
+    public ResponseEntity<Void> saveUserDetails(@RequestBody AppUserDetailsDto appUserDetailsDto){
+        appUserDetailsService.saveOrUpdateAppUserDetails(appUserDetailsDto);
         return ResponseEntity.ok().build();
     }
 
-    // works postman
     @GetMapping(path = "/getUserDetails/{userID}")
     public ResponseEntity<AppUserDetailsDto> getUserDetails(@PathVariable("userID") Long userID){
         return ResponseEntity.ok(appUserDetailsService.getAppUserDetails(userID));
+    }
+
+    @GetMapping("/getCities")
+    public ResponseEntity<List<String>> getCities(){
+        return ResponseEntity.ok(cityService.getAllCities());
     }
 
 }

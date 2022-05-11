@@ -24,7 +24,6 @@ public class AppUserDetails {
     @Column(name = "user_image_path")
     private String imagePath;
 
-    // todo: reference
     @Column(name = "city")
     private String city;
 
