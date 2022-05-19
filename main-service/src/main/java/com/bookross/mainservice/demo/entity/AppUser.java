@@ -1,21 +1,20 @@
 package com.bookross.mainservice.demo.entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"books", "favoriteBooks", "appUserDetails", "blogs", "favoriteBlogs"})
+@ToString(exclude = {"books", "favoriteBooks", "appUserDetails", "blogs", "favoriteBlogs"})
 @NoArgsConstructor
 @Entity
 @Table(name = "app_user")
@@ -28,7 +27,6 @@ public class AppUser implements UserDetails{
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-    @Email(regexp = ".+@.+\\..+")
     @Column(name = "email")
     private String email;
     @Column(name = "password")
@@ -41,9 +39,26 @@ public class AppUser implements UserDetails{
     @Column(name = "enabled")
     private boolean enabled = false;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_details_id")
     private AppUserDetails appUserDetails;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Book> books;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @JoinTable(name = "users_fav_books", joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "book_id")})
+    private Set<Book> favoriteBooks;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Blog> blogs;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @JoinTable(name = "users_fav_blogs", joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "blog_id")})
+    private Set<Blog> favoriteBlogs;
+
 
     public AppUser(String firstName, String lastName,
                    String email,

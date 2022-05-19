@@ -5,13 +5,8 @@ import com.bookross.mainservice.demo.entity.request.AppUserDto;
 import com.bookross.mainservice.demo.exception.EntityNotFoundException;
 import com.bookross.mainservice.demo.repository.AppUserRepository;
 import com.bookross.mainservice.demo.service.interfaces.AppUserService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.CascadeType;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,14 +43,6 @@ public class AppUserServiceImpl extends BaseServiceImpl<AppUser, Long, AppUserRe
         return appUsers.stream().map(this::convertToAppUserDto).collect(Collectors.toList());
     }
 
-    // get pageable result
-/*    @Override
-    public Page<AppUserDto> getAllUserDtos(Pageable pageable) {
-        List<AppUser> list = getRepository().getAllUsers(pageable.getPageSize(), pageable.getPageNumber() * pageable.getPageSize());
-        List<AppUserDto> appUserDtoList =list.stream().map(this::convertToAppUserDto).collect(Collectors.toList());
-        return new PageImpl<>(appUserDtoList, pageable, list.size());
-    }*/
-
     @Override
     public AppUserDto getUserDtoById(Long id) {
         return convertToAppUserDto(getUserById(id));
@@ -75,7 +62,6 @@ public class AppUserServiceImpl extends BaseServiceImpl<AppUser, Long, AppUserRe
     }
 
     @Override
-
     public void deleteUser(Long id) {
         getRepository().delete(findOrThrowNotFound(id));
     }

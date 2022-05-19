@@ -1,17 +1,15 @@
 package com.bookross.mainservice.demo.entity;
 
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "user")
+@ToString(exclude = "user")
 @NoArgsConstructor
 @Entity
 @Table(name = "app_user_details")
@@ -35,4 +33,8 @@ public class AppUserDetails {
 
     @Column(name = "about_user")
     private String aboutUser;
+
+    @OneToOne(mappedBy = "appUserDetails")
+    private AppUser user;
+
 }
