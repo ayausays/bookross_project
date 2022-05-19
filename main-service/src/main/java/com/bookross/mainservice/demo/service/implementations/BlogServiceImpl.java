@@ -11,8 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -30,12 +31,19 @@ public class BlogServiceImpl extends BaseServiceImpl<Blog, Long, BlogRepository>
         AppUser appUser = appUserService.findOrThrowNotFound(blogDto.getUserID());
         blog.setUser(appUser);
         getRepository().save(blog);
+
+        appUser.getBlogs().add(blog);
+        appUserService.save(appUser);
     }
 
     @Override
     public List<BlogDto> findBlogsByUserID(Long userID) {
-        List<Blog> blogs =  getRepository().findBlogsByUserID(userID);
-        return blogs.stream().map(this::convertToBlogDto).collect(Collectors.toList());
+        AppUser appUser = appUserService.findOrThrowNotFound(userID);
+        List<BlogDto> blogDtos = new ArrayList<>();
+        appUser.getBlogs().forEach(blog -> {
+            blogDtos.add(convertToBlogDto(blog));
+        });
+        return blogDtos;
     }
 
     public BlogDto convertToBlogDto(Blog blog){
@@ -56,7 +64,14 @@ public class BlogServiceImpl extends BaseServiceImpl<Blog, Long, BlogRepository>
 
     @Override
     public void deleteBlog(Long id) {
-        getRepository().delete(findOrThrowNotFound(id));
+        Blog blog = findOrThrowNotFound(id);
+        blog.getUsersAddedToFavs().forEach(user -> {
+            Set<Blog> blogs = user.getFavoriteBlogs();
+            blogs.remove(blog);
+            user.setFavoriteBlogs(blogs);
+            appUserService.save(user);
+        });
+        getRepository().delete(blog);
     }
 
     @Override
@@ -69,5 +84,49 @@ public class BlogServiceImpl extends BaseServiceImpl<Blog, Long, BlogRepository>
             blog.setBlogText(blogDto.getBlogText());
         }
         getRepository().save(blog);
+    }
+
+    @Override
+    public void addBlogToUserFavs(Long userID, Long blogID) {
+        AppUser appUser = appUserService.findOrThrowNotFound(userID);
+        Blog blog = findOrThrowNotFound(blogID);
+        Set<Blog> blogs = appUser.getFavoriteBlogs();
+        blogs.add(blog);
+        appUser.setFavoriteBlogs(blogs);
+
+        Set<AppUser> users = blog.getUsersAddedToFavs();
+        users.add(appUser);
+        blog.setUsersAddedToFavs(users);
+
+        appUserService.save(appUser);
+        save(blog);
+    }
+
+    @Override
+    public void deleteBlogFromUserFavs(Long userID, Long blogID) {
+        AppUser appUser = appUserService.findOrThrowNotFound(userID);
+        Blog blog = findOrThrowNotFound(blogID);
+        Set<Blog> blogs = appUser.getFavoriteBlogs();
+        blogs.remove(blog);
+        appUser.setFavoriteBlogs(blogs);
+
+        Set<AppUser> users = blog.getUsersAddedToFavs();
+        users.remove(appUser);
+        blog.setUsersAddedToFavs(users);
+
+        appUserService.save(appUser);
+        save(blog);
+    }
+
+    @Override
+    public List<BlogDto> getUserFavBlogs(Long userID) {
+        AppUser appUser = appUserService.findOrThrowNotFound(userID);
+        List<BlogDto> blogDtos = new ArrayList<>();
+        appUser.getFavoriteBlogs()
+                .forEach(blog -> {
+                    BlogDto blogDto = convertToBlogDto(blog);
+                    blogDtos.add(blogDto);
+                });
+        return blogDtos;
     }
 }

@@ -11,4 +11,7 @@ public interface BlogService extends BaseService<Blog, Long>{
     BlogDto findBlog(Long id);
     void deleteBlog(Long id);
     void updateBlog(BlogDto blogDto);
+    void addBlogToUserFavs(Long userID, Long blogID);
+    void deleteBlogFromUserFavs(Long userID, Long blogID);
+    List<BlogDto> getUserFavBlogs(Long userID);
 }

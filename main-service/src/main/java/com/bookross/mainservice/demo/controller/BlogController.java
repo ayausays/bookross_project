@@ -26,12 +26,12 @@ public class BlogController {
     public ResponseEntity<List<BlogDto>> getUserBlogsById(@PathVariable("userID") Long id) {
         return ResponseEntity.ok(blogService.findBlogsByUserID(id));
     }
-    
+
     @GetMapping(path = "/getBlog/{blogID}")
     public ResponseEntity<BlogDto> getBlog(@PathVariable("blogID") Long id){
         return ResponseEntity.ok(blogService.findBlog(id));
     }
-    
+
     @PostMapping(path = "/addBlog")
     public ResponseEntity<Void> addBlog(@RequestBody BlogDto blogDto){
         blogService.saveBlog(blogDto);
@@ -53,6 +53,25 @@ public class BlogController {
     @DeleteMapping(path = "/deleteBlog/{blogID}")
     public ResponseEntity<Void> deleteBlog(@PathVariable("blogID") Long id){
         blogService.deleteBlog(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(path = "/getAllFavs/{userID}")
+    public ResponseEntity<List<BlogDto>> getAllFavBlogs(@PathVariable("userID") Long userID) {
+        return ResponseEntity.ok(blogService.getUserFavBlogs(userID));
+    }
+
+    @PostMapping(path = "/addToFavs")
+    public ResponseEntity<Void> addBlogToFavs(@RequestParam("userID") Long userID,
+                                              @RequestParam("blogID") Long blogID) {
+        blogService.addBlogToUserFavs(userID, blogID);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping(path = "/deleteFromFavs")
+    public ResponseEntity<Void> deleteBlogFromFavs(@RequestParam("userID") Long userID,
+                                                   @RequestParam("blogID") Long blogID) {
+        blogService.deleteBlogFromUserFavs(userID, blogID);
         return ResponseEntity.ok().build();
     }
 

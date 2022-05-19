@@ -1,17 +1,16 @@
 package com.bookross.mainservice.demo.entity;
 
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"user", "usersAddedToFavs"})
+@ToString(exclude = {"user", "usersAddedToFavs"})
 @NoArgsConstructor
 @Entity
 @Table(name = "blog")
@@ -22,7 +21,7 @@ public class Blog {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private AppUser user;
 
     @Column(name = "topic")
@@ -36,4 +35,7 @@ public class Blog {
 
     @Column(name = "blog_image_path")
     private String imagePath;
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "favoriteBlogs", cascade = CascadeType.DETACH)
+    private Set<AppUser> usersAddedToFavs;
 }
