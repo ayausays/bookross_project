@@ -23,7 +23,7 @@ public class Genre {
     private String genre;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "genres", cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "genres")
     private List<Book> books;
 
 }

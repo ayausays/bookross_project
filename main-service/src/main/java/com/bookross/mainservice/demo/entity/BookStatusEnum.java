@@ -4,12 +4,14 @@ import lombok.Getter;
 
 @Getter
 public enum BookStatusEnum {
-    AVAILABLE("AVAILABLE"),
-    UNAVAILABLE("UNAVAILABLE");
+    AVAILABLE("AVAILABLE", "Доступен"),
+    UNAVAILABLE("UNAVAILABLE", "Недоступен");
 
-    String value;
+    String code;
+    String description;
 
-    BookStatusEnum(String value) {
-        this.value = value;
+    BookStatusEnum(String code, String description) {
+        this.code = code;
+        this.description = description;
     }
 }

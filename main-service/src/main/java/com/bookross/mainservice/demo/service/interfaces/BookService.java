@@ -11,5 +11,7 @@ public interface BookService extends BaseService<Book, Long> {
     BookDto findBook(Long id);
     void deleteBook(Long id);
     void updateBook(Long id, String title, String author, String status, String[] genres);
-
+    void addBookToUserFavs(Long userID, Long bookID);
+    void deleteBookFromUserFavs(Long userID, Long bookID);
+    List<BookDto> getUserFavBooks(Long userID);
 }

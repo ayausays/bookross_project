@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,16 +33,19 @@ public class BookServiceImpl extends BaseServiceImpl<Book, Long, BookRepository>
         book.setUser(appUser);
         book.setAuthor(bookDto.getAuthor());
         book.setTitle(bookDto.getTitle());
-        book.setStatus(BookStatusEnum.AVAILABLE.getValue());
+        book.setStatus(BookStatusEnum.AVAILABLE.getCode());
         setBookGenres(bookDto.getGenres(), book);
         getRepository().save(book);
+
+        appUser.getBooks().add(book);
+        appUserService.save(appUser);
     }
 
     @Override
     public List<BookDto> findBooksByUserID(Long userID) {
-        List<Book> books = getRepository().findBooksByUserID(userID);
+        AppUser appUser = appUserService.findOrThrowNotFound(userID);
         List<BookDto> bookDtos = new ArrayList<>();
-        books.forEach(book -> {
+        appUser.getBooks().forEach(book -> {
             BookDto bookDto = convertToBookDto(book);
             bookDtos.add(bookDto);
         });
@@ -98,6 +102,61 @@ public class BookServiceImpl extends BaseServiceImpl<Book, Long, BookRepository>
 
     @Override
     public void deleteBook(Long id) {
-        getRepository().delete(findOrThrowNotFound(id));
+        Book book = findOrThrowNotFound(id);
+        book.getUsersAddedToFavs().forEach(user -> {
+            Set<Book> books = user.getFavoriteBooks();
+            books.remove(book);
+            user.setFavoriteBooks(books);
+            appUserService.save(user);
+        });
+        getRepository().delete(book);
     }
+
+    @Override
+    public void addBookToUserFavs(Long userID, Long bookID) {
+        AppUser appUser = appUserService.findOrThrowNotFound(userID);
+        Book book = findOrThrowNotFound(bookID);
+        Set<Book> books = appUser.getFavoriteBooks();
+        books.add(book);
+        appUser.setFavoriteBooks(books);
+
+        Set<AppUser> users = book.getUsersAddedToFavs();
+        users.add(appUser);
+        book.setUsersAddedToFavs(users);
+
+        appUserService.save(appUser);
+        save(book);
+    }
+
+    @Override
+    public void deleteBookFromUserFavs(Long userID, Long bookID) {
+        AppUser appUser = appUserService.findOrThrowNotFound(userID);
+        Book book = findOrThrowNotFound(bookID);
+
+        Set<Book> books = appUser.getFavoriteBooks();
+        books.remove(book);
+        appUser.setFavoriteBooks(books);
+
+        Set<AppUser> users = book.getUsersAddedToFavs();
+        users.remove(appUser);
+        book.setUsersAddedToFavs(users);
+
+        appUserService.save(appUser);
+        save(book);
+    }
+
+    @Override
+    public List<BookDto> getUserFavBooks(Long userID) {
+        AppUser appUser = appUserService.findOrThrowNotFound(userID);
+        List<BookDto> bookDtos = new ArrayList<>();
+        appUser.getFavoriteBooks()
+                .forEach(book -> {
+                    BookDto bookDto = convertToBookDto(book);
+                    bookDtos.add(bookDto);
+                }
+        );
+        return bookDtos;
+    }
+
+
 }

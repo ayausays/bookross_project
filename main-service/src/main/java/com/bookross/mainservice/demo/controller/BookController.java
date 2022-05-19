@@ -1,6 +1,7 @@
 package com.bookross.mainservice.demo.controller;
 
 
+import com.bookross.mainservice.demo.entity.BookStatusEnum;
 import com.bookross.mainservice.demo.entity.request.BookDto;
 import com.bookross.mainservice.demo.service.interfaces.BookService;
 import com.bookross.mainservice.demo.service.interfaces.GenreService;
@@ -11,7 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.annotation.MultipartConfig;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -70,6 +74,32 @@ public class BookController {
     public ResponseEntity<Void> deleteBook(@PathVariable("bookID") Long id){
         bookService.deleteBook(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(path = "/getAllFavs/{userID}")
+    public ResponseEntity<List<BookDto>> getAllFavBooks(@PathVariable("userID") Long userID){
+        return ResponseEntity.ok(bookService.getUserFavBooks(userID));
+    }
+
+    @PostMapping(path = "/addToFavs")
+    public ResponseEntity<Void> addBookToFavs(@RequestParam("userID") Long userID,
+                                              @RequestParam("bookID") Long bookID){
+        bookService.addBookToUserFavs(userID, bookID);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping(path = "/deleteFromFavs")
+    public ResponseEntity<Void> deleteBookFromFavs(@RequestParam("userID") Long userID,
+                                                   @RequestParam("bookID") Long bookID){
+        bookService.deleteBookFromUserFavs(userID, bookID);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/getBookStatuses")
+    public ResponseEntity<Map<String, String>> getBookStatuses(){
+        List<BookStatusEnum> statuses =  Arrays.asList(BookStatusEnum.values());
+        return ResponseEntity.ok(statuses.stream()
+                .collect(Collectors.toMap(BookStatusEnum::getCode, BookStatusEnum::getDescription)));
     }
 
 }
