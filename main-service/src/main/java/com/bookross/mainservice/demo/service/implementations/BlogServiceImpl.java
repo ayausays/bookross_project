@@ -53,6 +53,7 @@ public class BlogServiceImpl extends BaseServiceImpl<Blog, Long, BlogRepository>
         blogDto.setTopic(blog.getTopic());
         blogDto.setDateOfPublication(blog.getDateOfPublication());
         blogDto.setBlogText(blog.getBlogText());
+        blogDto.setBlogImagePath(blog.getImagePath());
         return blogDto;
     }
 
@@ -65,6 +66,7 @@ public class BlogServiceImpl extends BaseServiceImpl<Blog, Long, BlogRepository>
     @Override
     public void deleteBlog(Long id) {
         Blog blog = findOrThrowNotFound(id);
+        // todo: delete blog image
         blog.getUsersAddedToFavs().forEach(user -> {
             Set<Blog> blogs = user.getFavoriteBlogs();
             blogs.remove(blog);

@@ -19,4 +19,6 @@ public class AppUserDto {
     @JsonIgnore
     private String password;
     private AppUserRole appUserRole;
+    private String appUserImagePath;
+    // todo: how to send image?
 }

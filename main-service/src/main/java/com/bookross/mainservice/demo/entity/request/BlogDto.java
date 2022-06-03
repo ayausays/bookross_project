@@ -17,5 +17,5 @@ public class BlogDto {
     private String topic;
     private String blogText;
     private LocalDateTime dateOfPublication;
-    // todo: how to send image?
+    private String blogImagePath;
 }
