@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -19,5 +20,10 @@ public class BookDto {
     private String author;
     private BookStatusEnum status;
     private List<String> genres;
-    // todo: how to send image?
+    private String description;
+    private String bookImagePath;
+    private LocalDateTime dateOfAdd;
+    private Integer year;
+    private int pageAmount;
+    private String userFIO;
 }
