@@ -17,5 +17,5 @@ public interface AppUserService extends BaseService<AppUser, Long> {
     AppUserDto getUserDtoByEmail(String email);
     AppUserDto getUserDtoById(Long id);
     List<AppUserDto> getAllUserDtos();
-    //Page<AppUserDto> getAllUserDtos(Pageable pageable);
+    List<AppUserDto> searchUsers(String value);
 }
