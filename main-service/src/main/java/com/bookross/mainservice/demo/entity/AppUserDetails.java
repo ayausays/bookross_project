@@ -28,6 +28,9 @@ public class AppUserDetails {
     @Column(name = "date_of_birth")
     private LocalDate dob;
 
+    @Column(name = "status")
+    private String status;
+
     @Column(name = "phone_number")
     private String phoneNumber;
 

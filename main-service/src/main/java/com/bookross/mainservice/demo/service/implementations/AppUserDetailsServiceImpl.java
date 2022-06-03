@@ -26,6 +26,7 @@ public class AppUserDetailsServiceImpl  extends BaseServiceImpl<AppUserDetails, 
             appUserDetailsDto.setUserID(user.getId());
             appUserDetailsDto.setCity(details.getCity());
             appUserDetailsDto.setPhoneNumber(details.getPhoneNumber());
+            appUserDetailsDto.setStatus(details.getStatus());
             appUserDetailsDto.setDob(details.getDob());
             appUserDetailsDto.setAboutUser(details.getAboutUser());
             return appUserDetailsDto;
@@ -46,6 +47,8 @@ public class AppUserDetailsServiceImpl  extends BaseServiceImpl<AppUserDetails, 
             details.setDob(appUserDetailsDto.getDob());
         if (appUserDetailsDto.getPhoneNumber() != null)
             details.setPhoneNumber(appUserDetailsDto.getPhoneNumber());
+        if (appUserDetailsDto.getStatus() != null)
+            details.setStatus(appUserDetailsDto.getStatus());
         if (appUserDetailsDto.getAboutUser() != null)
             details.setAboutUser(appUserDetailsDto.getAboutUser());
         AppUserDetails newDetails = getRepository().save(details);

@@ -15,6 +15,7 @@ public class AppUserDetailsDto {
     private Long userID;
     private String city;
     private LocalDate dob;
+    private String status;
     private String phoneNumber;
     private String aboutUser;
     // todo: how to send image
