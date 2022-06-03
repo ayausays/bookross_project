@@ -2,6 +2,7 @@ package com.bookross.mainservice.demo.entity;
 
 import lombok.*;
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -30,6 +31,18 @@ public class Book {
 
     @Column(name = "status")
     private String status;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "date_of_add")
+    private LocalDateTime dateOfAdd;
+
+    @Column(name = "year")
+    private Integer year;
+
+    @Column(name = "page_amount")
+    private int pageAmount;
 
     @Column(name = "book_image_path")
     private String imagePath;
