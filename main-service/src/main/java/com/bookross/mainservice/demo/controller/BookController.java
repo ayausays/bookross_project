@@ -34,9 +34,13 @@ public class BookController {
     }
 
     @GetMapping(path = "/getUserBooks/{userID}")
-
     public ResponseEntity<List<BookDto>> getBooksByUserId(@PathVariable("userID") Long id){
-        return ResponseEntity.ok(bookService.findBooksByUserID(id));
+        return ResponseEntity.ok(bookService.findBooksByUserID(id, BookStatusEnum.AVAILABLE));
+    }
+
+    @GetMapping(path = "/getArchived/{userID}")
+    public ResponseEntity<List<BookDto>> getArchivedBooksByUserId(@PathVariable("userID") Long id){
+        return ResponseEntity.ok(bookService.findBooksByUserID(id, BookStatusEnum.UNAVAILABLE));
     }
 
 
@@ -52,14 +56,9 @@ public class BookController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(path = "/updateBook/{bookID}")
-    public ResponseEntity<Void> updateBook(@PathVariable("bookID") Long id,
-                                           @RequestParam(required = false) String title,
-                                           @RequestParam(required = false) String author,
-                                           @RequestParam(required = false) String status,
-                                           @RequestParam(required = false) String[] genres
-                                           ){
-        bookService.updateBook(id, title, author, status, genres);
+    @PutMapping(path = "/updateBook")
+    public ResponseEntity<Void> updateBook(@RequestBody BookDto bookDto){
+        bookService.updateBook(bookDto);
         return ResponseEntity.ok().build();
     }
 
