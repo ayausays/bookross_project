@@ -27,6 +27,11 @@ public class BlogController {
         return ResponseEntity.ok(blogService.findBlogsByUserID(id));
     }
 
+    @GetMapping(path = "/getInteresting")
+    public ResponseEntity<List<BlogDto>> getInterestingBlogs() {
+        return ResponseEntity.ok(blogService.getInterestingBlogs());
+    }
+
     @GetMapping(path = "/getBlog/{blogID}")
     public ResponseEntity<BlogDto> getBlog(@PathVariable("blogID") Long id){
         return ResponseEntity.ok(blogService.findBlog(id));

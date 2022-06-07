@@ -8,12 +8,14 @@ import com.bookross.mainservice.demo.repository.BlogRepository;
 import com.bookross.mainservice.demo.service.interfaces.AppUserService;
 import com.bookross.mainservice.demo.service.interfaces.BlogService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -130,5 +132,10 @@ public class BlogServiceImpl extends BaseServiceImpl<Blog, Long, BlogRepository>
                     blogDtos.add(blogDto);
                 });
         return blogDtos;
+    }
+
+    @Override
+    public List<BlogDto> getInterestingBlogs() {
+        return getRepository().getInterestingBlogs().stream().map(this::convertToBlogDto).collect(Collectors.toList());
     }
 }
