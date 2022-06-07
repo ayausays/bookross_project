@@ -59,7 +59,6 @@ public class BookServiceImpl extends BaseServiceImpl<Book, Long, BookRepository>
         return bookDtos;
     }
 
-
     @Override
     public BookDto findBook(Long id) {
         Book book = findOrThrowNotFound(id);
@@ -230,5 +229,15 @@ public class BookServiceImpl extends BaseServiceImpl<Book, Long, BookRepository>
             whereBuilder.and(qBook.genres.any().in(genres));
         }
         return whereBuilder;
+    }
+
+    @Override
+    public List<BookDto> getPopularBooks() {
+        return getRepository().getPopularBooks().stream().map(this::convertToBookDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookDto> getNewBooks() {
+        return getRepository().getNewBooks().stream().map(this::convertToBookDto).collect(Collectors.toList());
     }
 }

@@ -18,5 +18,7 @@ public interface BookService extends BaseService<Book, Long> {
     List<BookDto> getUserFavBooks(Long userID);
     List<BookDto> searchBooks(String value);
     List<BookDto> searchBooksExtended(BookSearchDto searchDto);
+    List<BookDto> getPopularBooks();
+    List<BookDto> getNewBooks();
 
 }

@@ -68,7 +68,6 @@ public class BookController {
         return ResponseEntity.ok().build();
     }
 
-
     @DeleteMapping(path = "/deleteBook/{bookID}")
     public ResponseEntity<Void> deleteBook(@PathVariable("bookID") Long id){
         bookService.deleteBook(id);
@@ -99,6 +98,16 @@ public class BookController {
         List<BookStatusEnum> statuses =  Arrays.asList(BookStatusEnum.values());
         return ResponseEntity.ok(statuses.stream()
                 .collect(Collectors.toMap(BookStatusEnum::getCode, BookStatusEnum::getDescription)));
+    }
+
+    @GetMapping("/getNewBooks")
+    public ResponseEntity<List<BookDto>> getNewBooks(){
+        return ResponseEntity.ok(bookService.getNewBooks());
+    }
+
+    @GetMapping("/getPopularBooks")
+    public ResponseEntity<List<BookDto>> getPopularBooks(){
+        return ResponseEntity.ok(bookService.getPopularBooks());
     }
 
 }
