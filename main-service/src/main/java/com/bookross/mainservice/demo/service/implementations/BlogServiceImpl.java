@@ -25,17 +25,18 @@ public class BlogServiceImpl extends BaseServiceImpl<Blog, Long, BlogRepository>
     private final AppUserService appUserService;
 
     @Override
-    public void saveBlog(BlogDto blogDto) {
+    public Long saveBlog(BlogDto blogDto) {
         Blog blog = new Blog();
         blog.setBlogText(blogDto.getBlogText());
         blog.setTopic(blogDto.getTopic());
         blog.setDateOfPublication(LocalDateTime.now());
         AppUser appUser = appUserService.findOrThrowNotFound(blogDto.getUserID());
         blog.setUser(appUser);
-        getRepository().save(blog);
+        blog = getRepository().save(blog);
 
         appUser.getBlogs().add(blog);
         appUserService.save(appUser);
+        return blog.getId();
     }
 
     @Override

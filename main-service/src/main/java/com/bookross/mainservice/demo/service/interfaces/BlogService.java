@@ -6,7 +6,7 @@ import com.bookross.mainservice.demo.entity.request.BlogDto;
 import java.util.List;
 
 public interface BlogService extends BaseService<Blog, Long>{
-    void saveBlog(BlogDto BlogDto);
+    Long saveBlog(BlogDto BlogDto);
     List<BlogDto> findBlogsByUserID(Long userID);
     BlogDto findBlog(Long id);
     void deleteBlog(Long id);

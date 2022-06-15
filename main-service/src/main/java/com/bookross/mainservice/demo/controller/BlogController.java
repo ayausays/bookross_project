@@ -13,7 +13,7 @@ import javax.servlet.annotation.MultipartConfig;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(path = "api/v1/userBlogs")
 @RequiredArgsConstructor
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 10, maxFileSize = 1920 * 1080 * 50, maxRequestSize = 1920 * 1080 * 100)
@@ -38,9 +38,8 @@ public class BlogController {
     }
 
     @PostMapping(path = "/addBlog")
-    public ResponseEntity<Void> addBlog(@RequestBody BlogDto blogDto){
-        blogService.saveBlog(blogDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Long> addBlog(@RequestBody BlogDto blogDto){
+        return ResponseEntity.ok(blogService.saveBlog(blogDto));
     }
 
     @PutMapping(path = "/updateBlog")
