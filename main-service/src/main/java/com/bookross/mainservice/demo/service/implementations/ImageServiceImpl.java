@@ -30,7 +30,8 @@ public class ImageServiceImpl extends HttpServlet implements ImageService {
 
     @Override
     public void saveUserImage(Long id, MultipartFile multipartFile) {
-        String filePath = USER_IMAGES_DIR + File.separator + UUID.randomUUID() + ".jpg";
+        String uid = UUID.randomUUID() + ".jpg";
+        String filePath = USER_IMAGES_DIR + uid;
         putImageToFolder(filePath, multipartFile);
         AppUser appUser = appUserService.getUserById(id);
         AppUserDetails appUserDetails = appUser.getAppUserDetails() == null ? new AppUserDetails() : appUser.getAppUserDetails();
@@ -46,7 +47,8 @@ public class ImageServiceImpl extends HttpServlet implements ImageService {
 
     @Override
     public void saveBookImage(Long id, MultipartFile multipartFile) {
-        String filePath = BOOK_IMAGES_DIR + File.separator + UUID.randomUUID() + ".jpg";
+        String uid = UUID.randomUUID() + ".jpg";
+        String filePath = BOOK_IMAGES_DIR + File.separator + uid;
         putImageToFolder(filePath, multipartFile);
         Book book = bookService.findOrThrowNotFound(id);
         if (book.getImagePath() != null) {
@@ -60,7 +62,8 @@ public class ImageServiceImpl extends HttpServlet implements ImageService {
 
     @Override
     public void saveBlogImage(Long id, MultipartFile multipartFile) {
-        String filePath = BLOG_IMAGES_DIR + File.separator + UUID.randomUUID() + ".jpg";
+        String uid = UUID.randomUUID() + ".jpg";
+        String filePath = BLOG_IMAGES_DIR + File.separator + uid;
         putImageToFolder(filePath, multipartFile);
         Blog blog = blogService.findOrThrowNotFound(id);
         if (blog.getImagePath() != null){
