@@ -8,7 +8,7 @@ import com.bookross.mainservice.demo.entity.request.BookSearchDto;
 import java.util.List;
 
 public interface BookService extends BaseService<Book, Long> {
-    void saveBook(BookDto bookDto);
+    Long saveBook(BookDto bookDto);
     List<BookDto> findBooksByUserID(Long userID, BookStatusEnum statusEnum);
     BookDto findBook(Long id);
     void deleteBook(Long id);

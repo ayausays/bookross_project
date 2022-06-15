@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(path = "api/v1/userBooks")
 @RequiredArgsConstructor
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 10, maxFileSize = 1920 * 1080 * 50, maxRequestSize = 1920 * 1080 * 100)
@@ -51,9 +51,8 @@ public class BookController {
 
 
     @PostMapping(path = "/addBook")
-    public ResponseEntity<Void> addBook(@RequestBody BookDto bookDto){
-        bookService.saveBook(bookDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Long> addBook(@RequestBody BookDto bookDto){
+        return ResponseEntity.ok(bookService.saveBook(bookDto));
     }
 
     @PutMapping(path = "/updateBook")

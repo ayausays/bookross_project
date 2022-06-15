@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,7 +31,7 @@ public class BookServiceImpl extends BaseServiceImpl<Book, Long, BookRepository>
     private final EntityManager entityManager;
 
     @Override
-    public void saveBook(BookDto bookDto) {
+    public Long saveBook(BookDto bookDto) {
         Book book = new Book();
         AppUser appUser = appUserService.findOrThrowNotFound(bookDto.getUserID());
         book.setUser(appUser);
@@ -40,10 +43,12 @@ public class BookServiceImpl extends BaseServiceImpl<Book, Long, BookRepository>
         book.setPageAmount(bookDto.getPageAmount());
         book.setYear(bookDto.getYear());
         setBookGenres(bookDto.getGenres(), book);
-        getRepository().save(book);
+        book = getRepository().save(book);
 
         appUser.getBooks().add(book);
         appUserService.save(appUser);
+
+        return book.getId();
     }
 
     @Override
@@ -54,6 +59,7 @@ public class BookServiceImpl extends BaseServiceImpl<Book, Long, BookRepository>
                 .filter(book -> book.getStatus().equals(statusEnum.getCode()))
                 .forEach(book -> {
                     BookDto bookDto = convertToBookDto(book);
+                    setImgData(bookDto, book);
                     bookDtos.add(bookDto);
                 });
         return bookDtos;
@@ -62,7 +68,9 @@ public class BookServiceImpl extends BaseServiceImpl<Book, Long, BookRepository>
     @Override
     public BookDto findBook(Long id) {
         Book book = findOrThrowNotFound(id);
-        return convertToBookDto(book);
+        BookDto bookDto = convertToBookDto(book);
+        setImgData(bookDto, book);
+        return bookDto;
     }
 
     private BookDto convertToBookDto(Book book) {
@@ -77,11 +85,24 @@ public class BookServiceImpl extends BaseServiceImpl<Book, Long, BookRepository>
         bookDto.setTitle(book.getTitle());
         bookDto.setUserFIO(book.getUser().getFirstName() + " " + book.getUser().getLastName());
         bookDto.setDescription(book.getDescription());
+        //book.getImagePath().
         bookDto.setBookImagePath(book.getImagePath());
         bookDto.setGenres(book.getGenres().stream()
                 .map(Genre::getGenre)
                 .collect(Collectors.toList()));
         return bookDto;
+    }
+
+    public void setImgData(BookDto bookDto, Book book){
+        if (book.getImagePath() != null && !(book.getImagePath().trim().length()<1)) {
+            try {
+                byte[] bytes = Files.readAllBytes(Paths.get(book.getImagePath()));
+                String s = "data:image/jpg;base64," + Base64.getEncoder().encodeToString(bytes);
+                bookDto.setImgData(s);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     private void setBookGenres(List<String> genresList, Book book) {

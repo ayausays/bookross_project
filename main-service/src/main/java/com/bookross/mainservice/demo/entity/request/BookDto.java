@@ -26,4 +26,5 @@ public class BookDto {
     private Integer year;
     private int pageAmount;
     private String userFIO;
+    private String imgData;
 }
