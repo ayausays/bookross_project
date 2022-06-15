@@ -6,6 +6,7 @@ import com.bookross.mainservice.demo.entity.request.RegistrationRequest;
 import com.bookross.mainservice.demo.service.implementations.LoginService;
 import com.bookross.mainservice.demo.service.implementations.RegistrationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,8 +25,8 @@ public class MainController {
     }
 
     @PostMapping(path = "login")
-    public String login(@RequestBody LoginRequest loginRequest){
-        return loginService.login(loginRequest);
+    public ResponseEntity<Long> login(@RequestBody LoginRequest loginRequest){
+        return ResponseEntity.ok(loginService.login(loginRequest));
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
